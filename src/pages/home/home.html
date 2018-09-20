@@ -3,14 +3,19 @@
     <ion-title>
       <ion-icon name="menu" class="head"></ion-icon>
       RESTops
+      <ion-buttons end>
+        <button ion-button icon-only (click)="openTab()">
+          <ion-icon name="add-circle"></ion-icon>
+        </button>
+        </ion-buttons>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-item>
-    <ion-label floating>Select</ion-label>
-     <ion-select name="action" [(ngModel)]="action" #ctl="ngModel">
+    <ion-label floating>Select</ion-label> 
+     <ion-select name="action" [(ngModel)]="action"  #ctl="ngModel">
       <ion-option value="get">GET</ion-option>
       <ion-option value="post">POST</ion-option>
       <ion-option value="delete">DELETE</ion-option>
@@ -31,7 +36,7 @@
     </ion-col>
   </ion-row>
 
- 
+
 
   <div *ngIf="showFlag==false">
     <table id="params" align="center">
@@ -43,7 +48,7 @@
       </tr>
       <tr *ngFor="let params of getParamsList; let i=index">
         <td>
-          <ion-checkbox  name="params" [(ngModel)]="params[i]" ></ion-checkbox>
+          <ion-checkbox  name="params" checked></ion-checkbox>
         </td>
         <td>
           <ion-input type="text" placeholder="key" [(ngModel)]="getParamsList[i].key">{{params.key}}</ion-input>

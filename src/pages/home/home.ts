@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
+// import { ModalController } from 'ionic-angular';
 import { HttpClient }    from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
@@ -25,6 +26,7 @@ export class HomePage {
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
     public http: HttpClient,private storage: Storage ) {
   }
+
  
 saveData(){
   this.action;
@@ -163,5 +165,7 @@ alert.present();
       this.showFlag=false;
     }
   }
+
+
 
 }
