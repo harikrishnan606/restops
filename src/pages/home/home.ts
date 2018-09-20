@@ -22,10 +22,12 @@ export class HomePage {
 
   action:string;
   url:string; 
+  paramsCheck:string;
   storageKey:string;
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
     public http: HttpClient,private storage: Storage ) {
   }
+
 
  
 saveData(){
@@ -54,7 +56,7 @@ saveData(){
   }  
   this.showRes();
   this.setData();
-  
+
 }
 
 //get data

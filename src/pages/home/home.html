@@ -3,9 +3,9 @@
     <ion-title>
       <ion-icon name="menu" class="head"></ion-icon>
       RESTops
-      <ion-buttons end>
+      <ion-buttons  class="new-tab"  end>
         <button ion-button icon-only (click)="openTab()">
-          <ion-icon name="add-circle"></ion-icon>
+          <ion-icon   name="add-circle"></ion-icon>
         </button>
         </ion-buttons>
     </ion-title>
@@ -48,7 +48,7 @@
       </tr>
       <tr *ngFor="let params of getParamsList; let i=index">
         <td>
-          <ion-checkbox  name="params" checked></ion-checkbox>
+          <ion-checkbox  name="paramsCheck" checked></ion-checkbox>
         </td>
         <td>
           <ion-input type="text" placeholder="key" [(ngModel)]="getParamsList[i].key">{{params.key}}</ion-input>
