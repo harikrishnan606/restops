@@ -1,0 +1,38 @@
+page-home {
+
+    .head{
+        margin-right: 25px;
+    }
+    .param-btn{
+        margin-top: 38px;
+    }
+    .btn-arrange{
+        margin-top: 20px;
+        margin-bottom:25px 
+    }
+
+    #params {
+        font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 15px;
+    }
+    
+    #params td, #params th {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+    
+    #params tr:nth-child(even){background-color: #f2f2f2;}
+    
+    #params tr:hover {background-color: #ddd;}
+    
+    #params th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: rgb(77, 72, 72);
+        color: white;
+    }
+    
+}

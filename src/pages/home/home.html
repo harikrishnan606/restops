@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      <ion-icon name="menu" class="head"></ion-icon>
+      RESTops
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item>
+    <ion-label floating>Select</ion-label>
+     <ion-select name="action" [(ngModel)]="action" #ctl="ngModel">
+      <ion-option value="get">GET</ion-option>
+      <ion-option value="post">POST</ion-option>
+      <ion-option value="delete">DELETE</ion-option>
+      <ion-option value="patch">PATCH</ion-option>
+
+    </ion-select>
+  </ion-item>
+
+  <ion-row>
+    <ion-col col-8>
+      <ion-item>
+        <ion-label floating >URL here</ion-label>
+        <ion-input class="form-group" name="url" [(ngModel)]="url" #ctl="ngModel" clearInput></ion-input>
+      </ion-item>
+    </ion-col>
+    <ion-col col-3>
+      <button class="param-btn" ion-button color="light" (click)="showParams()">Params</button>
+    </ion-col>
+  </ion-row>
+
+ 
+
+  <div *ngIf="showFlag==false">
+    <table id="params" align="center">
+      <tr>
+        <th></th>
+        <th>Key</th>
+        <th>Value</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let params of getParamsList; let i=index">
+        <td>
+          <ion-checkbox  name="params" [(ngModel)]="params[i]" ></ion-checkbox>
+        </td>
+        <td>
+          <ion-input type="text" placeholder="key" [(ngModel)]="getParamsList[i].key">{{params.key}}</ion-input>
+        </td>
+        <td>
+          <ion-input type="text" placeholder="value" [(ngModel)]="getParamsList[i].value">{{params.value}}</ion-input>
+        </td>
+        <td>
+            <ion-icon name="add" (click)="addParamsList()"></ion-icon>
+            <ion-icon name="trash" (click)="removeParamsList(i)"></ion-icon>
+
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <button ion-button type="submit" class="btn-arrange" block (click)="saveData()">Send</button>
+
+  <div class="jumbotron" *ngIf="showResponseFlag==false">
+    <h5 class="display-8">Response!</h5>
+    <div class="form-group">
+      <textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="response"  name="response
+      "rows="3"></textarea>
+    </div>
+  </div>
+
+
+</ion-content>
