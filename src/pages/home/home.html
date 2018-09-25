@@ -25,8 +25,8 @@
 
   <div class="tab">
     <li   calss="span-tab" *ngFor="let tabs of newTabs; let i=index">
-      <span *ngIf="url===undefined">New Tab</span>
-      <a *ngIf="url !==undefined">{{tabs.url}}</a>
+      <span *ngIf="tabs.url===undefined" (click)="goToPage1(i)">New Tab</span>
+      <a *ngIf="tabs.url !==undefined"  (click)="goToPage1(i)" >{{tabs.url}}</a>
       <ion-icon calss="list-close" name="close-circle" (click)="removeTab(i)"></ion-icon>
 
     </li>
@@ -58,8 +58,8 @@
           </ion-col>
         </ion-row>
 
-        <div *ngIf="showFlag==false">
-          <table id="params" align="center">
+        <div *ngIf="showFlag[i]==false">
+          <table id="params" align="center" >
             <tr>
               <th></th>
               <th>Key</th>

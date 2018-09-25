@@ -5,6 +5,8 @@ import { AlertController } from 'ionic-angular';
 import { HttpClient }    from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
+import { ViewChild } from '@angular/core';
+import { Slides } from 'ionic-angular';
 
 
 @Component({
@@ -12,7 +14,9 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  showFlag=true;
+
+  @ViewChild(Slides) slides: Slides;
+  showFlag:any=[];
   showResponseFlag=true;
 
   newTabs:any =[];
@@ -32,7 +36,8 @@ export class HomePage {
     public http: HttpClient,private storage: Storage ) {
       //initial
       this.newTabs = [{}]
-      console.log('length'+this.newTabs.length)
+      this.showFlag.push(true)
+      console.log('length'+this.showFlag)
     }
 
     slideChange(e){
@@ -60,6 +65,7 @@ export class HomePage {
   
 addTab(){
   this.newTabs.push({});
+  this.showFlag.push(true);
   console.log("tab data" +JSON.stringify(this.newTabs));
     
 }
@@ -105,6 +111,13 @@ saveData(id){
   this.showRes();
   this.setData();
     }
+}
+
+goToPage1(id){
+  // let currentIndex = this.slides.getActiveIndex();
+  // console.log('Current index is', currentIndex);
+  this.slides.slideTo(id, 500);
+
 }
 
 //get data
@@ -211,14 +224,12 @@ alert.present();
   showParams(id){
     this.newTabs[id].params = [{}];
 
-    if(this.showFlag==false){
-     this.showFlag=true;
-    }else{
-      this.showFlag=false;
+    if(this.showFlag[id]==false){
+     this.showFlag[id]=true;
+    }else if(this.showFlag[id]==true){
+      this.showFlag[id]=false;
       console.log('params'+JSON.stringify(this.result))
     }
   }
-
-
 
 }
