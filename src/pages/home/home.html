@@ -1,79 +1,102 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>
-      <ion-icon name="menu" class="head"></ion-icon>
-      RESTops
-      <ion-buttons  class="new-tab"  end>
-        <button ion-button icon-only (click)="openTab()">
-          <ion-icon   name="add-circle"></ion-icon>
-        </button>
+<div id="navbar">
+  <ion-header>
+    <ion-navbar>
+      <ion-title>
+        <ion-icon name="menu" class="head"></ion-icon>
+        RESTops
+
+        <!-- <div>
+          <li ng-repeat=" x in newTabs">
+            <span calss="span-tab" *ngIf="url===undefined">New Tab</span>
+            <a *ngIf="url !==undefined">{{url}}</a></li>
+        </div> -->
+
+        <ion-buttons class="new-tab" end>
+          <button ion-button icon-only (click)="addTab()">
+            <ion-icon name="add-circle"></ion-icon>
+          </button>
         </ion-buttons>
-    </ion-title>
-  </ion-navbar>
-</ion-header>
-
+      </ion-title>
+    </ion-navbar>
+  </ion-header>
+</div>
 <ion-content padding>
-  <ion-item>
-    <ion-label floating>Select</ion-label> 
-     <ion-select name="action" [(ngModel)]="action"  #ctl="ngModel">
-      <ion-option value="get">GET</ion-option>
-      <ion-option value="post">POST</ion-option>
-      <ion-option value="delete">DELETE</ion-option>
-      <ion-option value="patch">PATCH</ion-option>
-
-    </ion-select>
-  </ion-item>
-
-  <ion-row>
-    <ion-col col-8>
-      <ion-item>
-        <ion-label floating >URL here</ion-label>
-        <ion-input class="form-group" name="url" [(ngModel)]="url" #ctl="ngModel" clearInput></ion-input>
-      </ion-item>
-    </ion-col>
-    <ion-col col-3>
-      <button class="param-btn" ion-button color="light" (click)="showParams()">Params</button>
-    </ion-col>
-  </ion-row>
 
 
+  <div class="tab">
+    <li   calss="span-tab" *ngFor="let tabs of newTabs; let i=index">
+      <span *ngIf="url===undefined">New Tab</span>
+      <a *ngIf="url !==undefined">{{tabs.url}}</a>
+      <ion-icon calss="list-close" name="close-circle" (click)="removeTab(i)"></ion-icon>
 
-  <div *ngIf="showFlag==false">
-    <table id="params" align="center">
-      <tr>
-        <th></th>
-        <th>Key</th>
-        <th>Value</th>
-        <th></th>
-      </tr>
-      <tr *ngFor="let params of getParamsList; let i=index">
-        <td>
-          <ion-checkbox  name="paramsCheck" checked></ion-checkbox>
-        </td>
-        <td>
-          <ion-input type="text" placeholder="key" [(ngModel)]="getParamsList[i].key">{{params.key}}</ion-input>
-        </td>
-        <td>
-          <ion-input type="text" placeholder="value" [(ngModel)]="getParamsList[i].value">{{params.value}}</ion-input>
-        </td>
-        <td>
-            <ion-icon name="add" (click)="addParamsList()"></ion-icon>
-            <ion-icon name="trash" (click)="removeParamsList(i)"></ion-icon>
-
-        </td>
-      </tr>
-    </table>
+    </li>
   </div>
 
-  <button ion-button type="submit" class="btn-arrange" block (click)="saveData()">Send</button>
+  <ion-slides pager="true">
+    <ion-slide  *ngFor="let tabs of newTabs; let i=index"  (swipe)="slideChange($event)" >
+      <div id="body" >
+        <ion-item>
+          <ion-label floating>Select</ion-label>
+          <ion-select name="action" [(ngModel)]="newTabs[i].action" #ctl="ngModel">
+            <ion-option value="get">GET</ion-option>
+            <ion-option value="post">POST</ion-option>
+            <ion-option value="delete">DELETE</ion-option>
+            <ion-option value="patch">PATCH</ion-option>
 
-  <div class="jumbotron" *ngIf="showResponseFlag==false">
-    <h5 class="display-8">Response!</h5>
-    <div class="form-group">
-      <textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="response"  name="response
-      "rows="3"></textarea>
-    </div>
-  </div>
+          </ion-select>
+        </ion-item>
 
+        <ion-row>
+          <ion-col col-8>
+            <ion-item>
+              <ion-label floating>URL here</ion-label>
+              <ion-input class="form-group" name="url" [(ngModel)]="newTabs[i].url" #ctl="ngModel" clearInput></ion-input>
+            </ion-item>
+          </ion-col>
+          <ion-col col-3>
+            <button class="param-btn" ion-button color="light" (click)="showParams(i)">Params</button>
+          </ion-col>
+        </ion-row>
+
+        <div *ngIf="showFlag==false">
+          <table id="params" align="center">
+            <tr>
+              <th></th>
+              <th>Key</th>
+              <th>Value</th>
+              <th></th>
+            </tr>
+            <tr *ngFor="let params of newTabs[i].params; let in=index">
+              <td>
+                <ion-checkbox name="paramsCheck" checked></ion-checkbox>
+              </td>
+              <td>
+                <ion-input type="text" placeholder="key" [(ngModel)]="params.key">{{params.key}}</ion-input>
+              </td>
+              <td>
+                <ion-input type="text" placeholder="value" [(ngModel)]="params.value">{{params.value}}</ion-input>
+              </td>
+              <td>
+                <ion-icon name="add" (click)="addParamsList(i)"></ion-icon>
+                <ion-icon name="trash" (click)="removeParamsList(i,in)"></ion-icon>
+
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <button ion-button type="submit" class="btn-arrange" block (click)="saveData(i)">Send</button>
+
+        <div class="jumbotron" *ngIf="showResponseFlag==false">
+          <h5 class="display-8">Response!</h5>
+          <div class="form-group">
+            <textarea class="form-control" id="exampleFormControlTextarea1"
+             [(ngModel)]="newTabs[i].response" name="response"
+              rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </ion-slide>
+  </ion-slides>
 
 </ion-content>

@@ -15,7 +15,8 @@ export class HomePage {
   showFlag=true;
   showResponseFlag=true;
 
-  getParamsList:any = [{key:"", value:""}];
+  newTabs:any =[];
+  // getParamsList:any = [{key:"", value:""}];
   data:any =[];
   result:any={};
   response: any = {};
@@ -24,88 +25,136 @@ export class HomePage {
   url:string; 
   paramsCheck:string;
   storageKey:string;
+
+  finalInfo:any={};
+
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
     public http: HttpClient,private storage: Storage ) {
+      //initial
+      this.newTabs = [{}]
+      console.log('length'+this.newTabs.length)
+    }
+
+    slideChange(e){
+      console.log('in slide movement' +JSON.stringify(e));
+      this.showFlag=true;
+      if(e.direction ==2){
+        let alert = this.alertCtrl.create({
+          title: 'Alert',
+          subTitle: 'slide changed to right',
+          buttons: ['Ok']
+        }); alert.present();
+        console.log("slide right");
+      }else if(e.direction ==4){
+        let alert = this.alertCtrl.create({
+          title: 'Alert',
+
+
+          subTitle: 'slide changed to left',
+          buttons: ['Ok']
+        }); alert.present();
+        console.log("slide left");
+      }
+     
+    }
+  
+addTab(){
+  this.newTabs.push({});
+  console.log("tab data" +JSON.stringify(this.newTabs));
+    
+}
+removeTab(index){
+
+  if(this.newTabs.length<=1){
+    this.newTabs.splice(index,0);
+  }else {
+    this.newTabs.splice(index,1);
   }
+}
+saveData(id){
+  // this.newTabs.action;
+  // this.newTabs.url;
+  if (this.newTabs[id].params !== undefined) {
+      for (var i=0; i<this.newTabs[id].params.length; i++) {
+    this.result[this.newTabs[id].params[i].key]= this.newTabs[id].params[i].value;
+    console.log('res'+JSON.stringify(this.result))
+    
 
-
- 
-saveData(){
-  this.action;
-  this.url;
-      for (var i=0; i<this.getParamsList.length; i++) {
-    this.result[this.getParamsList[i].key]= this.getParamsList[i].value;
-    // console.log("result= " +JSON.stringify(this.result));
 
     }
+
+  }
+    for (var i=0;i<this.newTabs.length;i++) {
  
-  if(this.action==="get"){
-    this.getData();
+  if(this.newTabs[i].action==="get"){
+    this.getData(i);
   }
-  else if(this.action==="post"){
+
+  else if(this.newTabs[i].action==="post"){
     console.log("post");
-    this.postData();
+    this.postData(i);
   }
-  else if(this.action==="delete"){
+  else if(this.newTabs[i].action==="delete"){
     console.log("delete");
-    this.deleteData();
+    this.deleteData(i);
   }  
-  else if(this.action==="patch"){
+  else if(this.newTabs[i].action==="patch"){
     console.log("patch");
-    this.updateData();
+    this.updateData(i);
   }  
   this.showRes();
   this.setData();
-
+    }
 }
 
 //get data
-getData(){
-  this.http.get(this.url, {params: this.result})
+getData(id){
+  console.log('get')
+  this.http.get(this.newTabs[id].url, {params: this.result})
   .subscribe((data:any) => {
-    this.response = JSON.stringify(data);
+    this.newTabs[id].response = JSON.stringify(data);
     if (this.response) { 
       this.result={};
+      console.log('final get ='+JSON.stringify(this.newTabs))
     }
-    console.log("status" +data.status);
-    console.log("data" +data.data); // data received by server
-    console.log("hearder" +data.headers);
-
-  })
+   
+  });
 }
 //post data
-postData(){
-  this.http.post(this.url, this.result)
+postData(id){
+  this.http.post(this.newTabs[id].url, {params: this.result})
     .subscribe((data:any) => {
-      this.response=JSON.stringify(data);
-      console.log("dtaaaa" +data);
-      // if (this.response) { 
-      //   this.result={};
-      // }
+      this.newTabs[id].response=JSON.stringify(data);
+      if (this.response) { 
+        this.result={};
+        console.log('final post'+JSON.stringify(this.newTabs));
+
+      }
      }, error => {
       console.log(error);
     });
 }
 
 //delete data
-deleteData(){
-  this.http.delete(this.url, {params: this.result})
+deleteData(id){
+  this.http.delete(this.newTabs[id].url,{params: this.result})
     .subscribe((data:any) => {
-      this.response=JSON.stringify(data);
-      console.log("delete =" +data);
+      this.newTabs[id].response=JSON.stringify(data);
+      console.log('final delete'+JSON.stringify(this.newTabs))
      }, error => {
       console.log(error);
     });
 }
 
 //updateData
-updateData(){
-  this.http.patch(this.url, {params: this.result})
+updateData(id){
+  this.http.patch(this.newTabs[id].url,{params: this.result})
   .subscribe((data:any) => {
-    this.response = JSON.stringify(data);
-    console.log("status" +data.status);
-    console.log("data" +data.data); // data received by server
-    console.log("hearder" +data.headers);
+    this.newTabs[id].response=JSON.stringify(data);
+      console.log('final patch'+JSON.stringify(this.newTabs))
+    // console.log("status" +data.status);
+    // console.log("data" +data.data); // data received by server
+    // console.log("hearder" +data.headers);
 
   })
 }
@@ -113,8 +162,8 @@ updateData(){
 //localstorageset
 setData(){
   return new Promise(resolve => {
-    this.storage.set(this.storageKey,{"action": this.action, "url": this.url, 
-    "params": this.getParamsList,"res": this.response});
+    this.storage.set(this.storageKey,{"action": this.finalInfo.action, "url":  this.finalInfo.url, 
+    "params":this.finalInfo.params,"res": this.finalInfo.response});
     resolve(this.storage.get(this.storageKey));
     });
 
@@ -126,24 +175,23 @@ loadData(){
     this.storage.get(this.storageKey).then((data ) => {
       resolve(data);
       console.log("data req=" +data.action+ "    url==" +data.url+ "  params== " +data.params);
-      this.action = data.action;
-     this.url =data.url;
-     this.getParamsList.key = data.params;
-      this.response = data.response;
+      this.finalInfo.action = data.action;
+     this.finalInfo.url =data.url;
+     this.finalInfo.params.key = data.params;
+      this.finalInfo.response = data.response;
     });
 
   })
   
 }
 
-  addParamsList(){
-    this.getParamsList.push({key:"", value:""});
+  addParamsList(id){
+    this.newTabs[id].params.push({});
     
   }
 
-  removeParamsList(index){
-    if(this.getParamsList.length<=1){
-      this.getParamsList.splice(index,0);
+  removeParamsList(id,inid){
+    if(this.newTabs[id].params.length<=1){
      
       const alert=this.alertCtrl.create({
       title:'Alert',
@@ -152,7 +200,7 @@ loadData(){
       });
 alert.present();
     }else{
-      this.getParamsList.splice(index,1)
+      this.newTabs[id].params.splice(inid,1)
     }
 
   }
@@ -160,11 +208,14 @@ alert.present();
   showRes(){
     this.showResponseFlag=false;
   }
-  showParams(){
+  showParams(id){
+    this.newTabs[id].params = [{}];
+
     if(this.showFlag==false){
-      this.showFlag=true;
+     this.showFlag=true;
     }else{
       this.showFlag=false;
+      console.log('params'+JSON.stringify(this.result))
     }
   }
 
