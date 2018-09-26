@@ -28,7 +28,7 @@ export class HomePage {
   action:string;
   url:string; 
   paramsCheck:string;
-  storageKey:any=[];
+  storageKey:string;
   finalInfo:any={};
 
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
@@ -36,7 +36,7 @@ export class HomePage {
       //initial
       this.newTabs = [{}]
       this.showFlag.push(true);
-      // this.loadData();
+      this.loadData();
       // console.log('length'+this.showFlag)
     }
 
@@ -106,8 +106,8 @@ saveData(id){
     console.log("patch");
     this.updateData(i);
   }  
-  this.showRes();
-  // this.setData();
+  this.setData();
+ 
     }
 }
 
@@ -130,7 +130,8 @@ getData(id){
       this.result={};
       console.log('final get ='+JSON.stringify(this.newTabs))
     }
-   
+    this.showRes();
+
   });
 }
 //post data
@@ -173,18 +174,19 @@ updateData(id){
 }
 
 //localstorageset
-// setData(){
-//   this.storage.set('storageKey',{ this.any.newTabs } );
-//   console.log("set data=" +JSON.stringify(this.storageKey));
-//   }
+setData(){
+  this.storage.set('storageKey',JSON.stringify(this.newTabs));
+  console.log("set data=" +JSON.stringify(this.storageKey));
+  }
  
 
 //loadData
-// loadData(){
-//   this.storage.getItem('keyOfData').then((val) => {
-//     console.log('Your age is', JSON.parse(val));
-//   });
-// }
+loadData(){
+  this.storage.get('storageKey').then((val) => {
+    console.log('Yourload data ', JSON.parse(val));
+    this.newTabs = JSON.parse(val)
+  });
+}
   addParamsList(id){
     this.newTabs[id].params.push({});
     
