@@ -5,6 +5,8 @@ import { AlertController } from 'ionic-angular';
 import { HttpClient }    from '@angular/common/http';
 import { Storage } from '@ionic/storage';
 
+import { ViewChild } from '@angular/core';
+import { Slides } from 'ionic-angular';
 
 
 @Component({
@@ -12,7 +14,9 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  showFlag=true;
+
+  @ViewChild(Slides) slides: Slides;
+  showFlag:any=[];
   showResponseFlag=true;
 
   newTabs:any =[];
@@ -25,14 +29,15 @@ export class HomePage {
   url:string; 
   paramsCheck:string;
   storageKey:string;
-
   finalInfo:any={};
 
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
     public http: HttpClient,private storage: Storage ) {
       //initial
       this.newTabs = [{}]
-      console.log('length'+this.newTabs.length)
+      this.showFlag.push(true);
+      this.loadData();
+      // console.log('length'+this.showFlag)
     }
 
     slideChange(e){
@@ -60,7 +65,9 @@ export class HomePage {
   
 addTab(){
   this.newTabs.push({});
+  this.showFlag.push(true);
   console.log("tab data" +JSON.stringify(this.newTabs));
+  this.goToPage1(this.newTabs.length-1)
     
 }
 removeTab(index){
@@ -78,13 +85,10 @@ saveData(id){
       for (var i=0; i<this.newTabs[id].params.length; i++) {
     this.result[this.newTabs[id].params[i].key]= this.newTabs[id].params[i].value;
     console.log('res'+JSON.stringify(this.result))
-    
-
-
     }
 
   }
-    for (var i=0;i<this.newTabs.length;i++) {
+    for (let i=0;i<this.newTabs.length;i++) {
  
   if(this.newTabs[i].action==="get"){
     this.getData(i);
@@ -102,9 +106,18 @@ saveData(id){
     console.log("patch");
     this.updateData(i);
   }  
-  this.showRes();
   this.setData();
+ 
     }
+}
+
+goToPage1(id){
+  // let currentIndex = this.slides.getActiveIndex();
+  // console.log('Current index is', currentIndex);
+  this.slides.slideTo(id, 500);
+  console.log('goto'+id)
+  // this.newTabs = window.localStorage.getItem("storageKey")
+
 }
 
 //get data
@@ -117,7 +130,8 @@ getData(id){
       this.result={};
       console.log('final get ='+JSON.stringify(this.newTabs))
     }
-   
+    this.showRes();
+
   });
 }
 //post data
@@ -161,30 +175,18 @@ updateData(id){
 
 //localstorageset
 setData(){
-  return new Promise(resolve => {
-    this.storage.set(this.storageKey,{"action": this.finalInfo.action, "url":  this.finalInfo.url, 
-    "params":this.finalInfo.params,"res": this.finalInfo.response});
-    resolve(this.storage.get(this.storageKey));
-    });
-
-}
+  this.storage.set('storageKey',JSON.stringify(this.newTabs));
+  console.log("set data=" +JSON.stringify(this.storageKey));
+  }
+ 
 
 //loadData
 loadData(){
-  return new Promise(resolve => {
-    this.storage.get(this.storageKey).then((data ) => {
-      resolve(data);
-      console.log("data req=" +data.action+ "    url==" +data.url+ "  params== " +data.params);
-      this.finalInfo.action = data.action;
-     this.finalInfo.url =data.url;
-     this.finalInfo.params.key = data.params;
-      this.finalInfo.response = data.response;
-    });
-
-  })
-  
+  this.storage.get('storageKey').then((val) => {
+    console.log('Yourload data ', JSON.parse(val));
+    this.newTabs = JSON.parse(val)
+  });
 }
-
   addParamsList(id){
     this.newTabs[id].params.push({});
     
@@ -211,14 +213,12 @@ alert.present();
   showParams(id){
     this.newTabs[id].params = [{}];
 
-    if(this.showFlag==false){
-     this.showFlag=true;
-    }else{
-      this.showFlag=false;
+    if(this.showFlag[id]==false){
+     this.showFlag[id]=true;
+    }else if(this.showFlag[id]==true){
+      this.showFlag[id]=false;
       console.log('params'+JSON.stringify(this.result))
     }
   }
-
-
 
 }

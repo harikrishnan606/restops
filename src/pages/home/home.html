@@ -21,82 +21,86 @@
   </ion-header>
 </div>
 <ion-content padding>
-
-
-  <div class="tab">
-    <li   calss="span-tab" *ngFor="let tabs of newTabs; let i=index">
-      <span *ngIf="url===undefined">New Tab</span>
-      <a *ngIf="url !==undefined">{{tabs.url}}</a>
-      <ion-icon calss="list-close" name="close-circle" (click)="removeTab(i)"></ion-icon>
-
-    </li>
-  </div>
-
-  <ion-slides pager="true">
-    <ion-slide  *ngFor="let tabs of newTabs; let i=index"  (swipe)="slideChange($event)" >
-      <div id="body" >
-        <ion-item>
-          <ion-label floating>Select</ion-label>
-          <ion-select name="action" [(ngModel)]="newTabs[i].action" #ctl="ngModel">
-            <ion-option value="get">GET</ion-option>
-            <ion-option value="post">POST</ion-option>
-            <ion-option value="delete">DELETE</ion-option>
-            <ion-option value="patch">PATCH</ion-option>
-
-          </ion-select>
-        </ion-item>
-
-        <ion-row>
-          <ion-col col-8>
-            <ion-item>
-              <ion-label floating>URL here</ion-label>
-              <ion-input class="form-group" name="url" [(ngModel)]="newTabs[i].url" #ctl="ngModel" clearInput></ion-input>
-            </ion-item>
-          </ion-col>
-          <ion-col col-3>
-            <button class="param-btn" ion-button color="light" (click)="showParams(i)">Params</button>
-          </ion-col>
+  <ion-scroll scrollY="true" style="white-space:nowrap; height: 700px;">
+    <div class="tab">
+      <ion-scroll scrollX="true" style="white-space:nowrap; height: 50px;">
+        <ion-row nowrap>
+          <li calss="span-tab" *ngFor="let tabs of newTabs; let i=index">
+            <span *ngIf="tabs.url===undefined && i===0" (click)="goToPage1(i)">New Tab</span>
+            <span *ngIf="tabs.url===undefined && i>0" (click)="goToPage1(i)">New Tab{{i}}</span>
+            <a *ngIf="tabs.url !==undefined" (click)="goToPage1(i)">{{tabs.url}}</a>
+            <ion-icon calss="list-close" name="close-circle" (click)="removeTab(i)"></ion-icon>
+          </li>
         </ion-row>
+      </ion-scroll>
+    </div>
+    
 
-        <div *ngIf="showFlag==false">
-          <table id="params" align="center">
-            <tr>
-              <th></th>
-              <th>Key</th>
-              <th>Value</th>
-              <th></th>
-            </tr>
-            <tr *ngFor="let params of newTabs[i].params; let in=index">
-              <td>
-                <ion-checkbox name="paramsCheck" checked></ion-checkbox>
-              </td>
-              <td>
-                <ion-input type="text" placeholder="key" [(ngModel)]="params.key">{{params.key}}</ion-input>
-              </td>
-              <td>
-                <ion-input type="text" placeholder="value" [(ngModel)]="params.value">{{params.value}}</ion-input>
-              </td>
-              <td>
-                <ion-icon name="add" (click)="addParamsList(i)"></ion-icon>
-                <ion-icon name="trash" (click)="removeParamsList(i,in)"></ion-icon>
 
-              </td>
-            </tr>
-          </table>
-        </div>
+    <ion-slides pager="true">
+      <ion-slide *ngFor="let tabs of newTabs; let i=index" (swipe)="slideChange($event)">
+        <div id="body">
+          <ion-item>
+            <ion-label floating>Select</ion-label>
+            <ion-select name="action" [(ngModel)]="newTabs[i].action" #ctl="ngModel">
+              <ion-option value="get">GET</ion-option>
+              <ion-option value="post">POST</ion-option>
+              <ion-option value="delete">DELETE</ion-option>
+              <ion-option value="patch">PATCH</ion-option>
 
-        <button ion-button type="submit" class="btn-arrange" block (click)="saveData(i)">Send</button>
+            </ion-select>
+          </ion-item>
 
-        <div class="jumbotron" *ngIf="showResponseFlag==false">
-          <h5 class="display-8">Response!</h5>
-          <div class="form-group">
-            <textarea class="form-control" id="exampleFormControlTextarea1"
-             [(ngModel)]="newTabs[i].response" name="response"
-              rows="3"></textarea>
+          <ion-row>
+            <ion-col col-8>
+              <ion-item>
+                <ion-label floating>URL here</ion-label>
+                <ion-input class="form-group" name="url" [(ngModel)]="newTabs[i].url" #ctl="ngModel" clearInput></ion-input>
+              </ion-item>
+            </ion-col>
+            <ion-col col-3>
+              <button class="param-btn" ion-button color="light" (click)="showParams(i)">Params</button>
+            </ion-col>
+          </ion-row>
+
+          <div *ngIf="showFlag[i]==false">
+            <table id="params" align="center">
+              <tr>
+                <th></th>
+                <th>Key</th>
+                <th>Value</th>
+                <th></th>
+              </tr>
+              <tr *ngFor="let params of newTabs[i].params; let in=index">
+                <td>
+                  <ion-checkbox name="paramsCheck" checked></ion-checkbox>
+                </td>
+                <td>
+                  <ion-input type="text" placeholder="key" [(ngModel)]="params.key">{{params.key}}</ion-input>
+                </td>
+                <td>
+                  <ion-input type="text" placeholder="value" [(ngModel)]="params.value">{{params.value}}</ion-input>
+                </td>
+                <td>
+                  <ion-icon name="add" (click)="addParamsList(i)"></ion-icon>
+                  <ion-icon name="trash" (click)="removeParamsList(i,in)"></ion-icon>
+
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <button ion-button type="submit" class="btn-arrange" block (click)="saveData(i)">Send</button>
+
+          <div class="jumbotron" *ngIf="showResponseFlag==false">
+            <h5 class="display-8">Response!</h5>
+            <div class="form-group">
+              <textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="newTabs[i].response" name="response"
+                rows="3"></textarea>
+            </div>
           </div>
         </div>
-      </div>
-    </ion-slide>
-  </ion-slides>
-
+      </ion-slide>
+    </ion-slides>
+  </ion-scroll>
 </ion-content>
