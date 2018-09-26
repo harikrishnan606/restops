@@ -21,8 +21,7 @@
   </ion-header>
 </div>
 <ion-content padding>
-
-
+  <ion-scroll scrollY="true" style="white-space:nowrap; height: 700px;">
   <div class="tab">
     <li   calss="span-tab" *ngFor="let tabs of newTabs; let i=index">
       <span *ngIf="tabs.url===undefined" (click)="goToPage1(i)">New Tab</span>
@@ -31,6 +30,7 @@
 
     </li>
   </div>
+
 
   <ion-slides pager="true">
     <ion-slide  *ngFor="let tabs of newTabs; let i=index"  (swipe)="slideChange($event)" >
@@ -98,5 +98,5 @@
       </div>
     </ion-slide>
   </ion-slides>
-
+</ion-scroll>
 </ion-content>

@@ -28,16 +28,16 @@ export class HomePage {
   action:string;
   url:string; 
   paramsCheck:string;
-  storageKey:string;
-
+  storageKey:any=[];
   finalInfo:any={};
 
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
     public http: HttpClient,private storage: Storage ) {
       //initial
       this.newTabs = [{}]
-      this.showFlag.push(true)
-      console.log('length'+this.showFlag)
+      this.showFlag.push(true);
+      // this.loadData();
+      // console.log('length'+this.showFlag)
     }
 
     slideChange(e){
@@ -67,6 +67,7 @@ addTab(){
   this.newTabs.push({});
   this.showFlag.push(true);
   console.log("tab data" +JSON.stringify(this.newTabs));
+  this.goToPage1(this.newTabs.length-1)
     
 }
 removeTab(index){
@@ -84,13 +85,10 @@ saveData(id){
       for (var i=0; i<this.newTabs[id].params.length; i++) {
     this.result[this.newTabs[id].params[i].key]= this.newTabs[id].params[i].value;
     console.log('res'+JSON.stringify(this.result))
-    
-
-
     }
 
   }
-    for (var i=0;i<this.newTabs.length;i++) {
+    for (let i=0;i<this.newTabs.length;i++) {
  
   if(this.newTabs[i].action==="get"){
     this.getData(i);
@@ -109,7 +107,7 @@ saveData(id){
     this.updateData(i);
   }  
   this.showRes();
-  this.setData();
+  // this.setData();
     }
 }
 
@@ -117,6 +115,8 @@ goToPage1(id){
   // let currentIndex = this.slides.getActiveIndex();
   // console.log('Current index is', currentIndex);
   this.slides.slideTo(id, 500);
+  console.log('goto'+id)
+  // this.newTabs = window.localStorage.getItem("storageKey")
 
 }
 
@@ -173,31 +173,18 @@ updateData(id){
 }
 
 //localstorageset
-setData(){
-  return new Promise(resolve => {
-    this.storage.set(this.storageKey,{"action": this.finalInfo.action, "url":  this.finalInfo.url, 
-    "params":this.finalInfo.params,"res": this.finalInfo.response});
-    resolve(this.storage.get(this.storageKey));
-    });
-
-}
+// setData(){
+//   this.storage.set('storageKey',{ this.any.newTabs } );
+//   console.log("set data=" +JSON.stringify(this.storageKey));
+//   }
+ 
 
 //loadData
-loadData(){
-  return new Promise(resolve => {
-    this.storage.get(this.storageKey).then((data ) => {
-      resolve(data);
-      console.log("data req=" +data.action+ "    url==" +data.url+ "  params== " +data.params);
-      this.finalInfo.action = data.action;
-     this.finalInfo.url =data.url;
-     this.finalInfo.params.key = data.params;
-      this.finalInfo.response = data.response;
-    });
-
-  })
-  
-}
-
+// loadData(){
+//   this.storage.getItem('keyOfData').then((val) => {
+//     console.log('Your age is', JSON.parse(val));
+//   });
+// }
   addParamsList(id){
     this.newTabs[id].params.push({});
     
