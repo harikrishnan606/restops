@@ -17,7 +17,7 @@ export class HomePage {
 
   @ViewChild(Slides) slides: Slides;
   showFlag:any=[];
-  showResponseFlag=true;
+  showResponseFlag:any=[];
 
   newTabs:any =[];
   // getParamsList:any = [{key:"", value:""}];
@@ -35,7 +35,8 @@ export class HomePage {
     public http: HttpClient,private storage: Storage ) {
       //initial
       this.newTabs = [{}]
-      this.showFlag.push(true);
+      // this.showFlag.push(true);
+      // this.showResponseFlag.push(true);
       this.loadData();
       // console.log('length'+this.showFlag)
     }
@@ -65,17 +66,19 @@ export class HomePage {
   
 addTab(){
   this.newTabs.push({});
-  this.showFlag.push(true);
+    this.showFlag.push(true);
   console.log("tab data" +JSON.stringify(this.newTabs));
   this.goToPage1(this.newTabs.length-1)
+  this.setData();
     
 }
 removeTab(index){
-
   if(this.newTabs.length<=1){
     this.newTabs.splice(index,0);
   }else {
     this.newTabs.splice(index,1);
+    this.setData();
+
   }
 }
 saveData(id){
@@ -92,7 +95,9 @@ saveData(id){
  
   if(this.newTabs[i].action==="get"){
     this.getData(i);
+    break;
   }
+  
 
   else if(this.newTabs[i].action==="post"){
     console.log("post");
@@ -127,12 +132,16 @@ getData(id){
   .subscribe((data:any) => {
     this.newTabs[id].response = JSON.stringify(data);
     if (this.response) { 
+      this.setData();
+      this.showResponseFlag[id]=false;
+
       this.result={};
       console.log('final get ='+JSON.stringify(this.newTabs))
     }
-    this.showRes();
+    // this.showRes(id);
 
   });
+
 }
 //post data
 postData(id){
@@ -141,6 +150,8 @@ postData(id){
       this.newTabs[id].response=JSON.stringify(data);
       if (this.response) { 
         this.result={};
+        this.setData()
+      this.showResponseFlag[id]=false;
         console.log('final post'+JSON.stringify(this.newTabs));
 
       }
@@ -182,9 +193,22 @@ setData(){
 
 //loadData
 loadData(){
+ 
   this.storage.get('storageKey').then((val) => {
     console.log('Yourload data ', JSON.parse(val));
     this.newTabs = JSON.parse(val)
+    if (this.newTabs) {
+      for(var i=0;i<this.newTabs.length;i++){
+        this.showResponseFlag.push(true)
+        // if(this.newTabs[i].response !="undefined"){
+        //   this.showResponseFlag[i]=false;
+        // }
+    
+        if(this.newTabs[i].params !="undefined"){
+          this.showFlag.push(false);
+        } 
+      }
+    }
   });
 }
   addParamsList(id){
@@ -207,12 +231,13 @@ alert.present();
 
   }
 
-  showRes(){
-    this.showResponseFlag=false;
-  }
+  // showRes(id){
+  //   this.showResponseFlag[id]=false;
+  // }
   showParams(id){
+   
+console.log('hghgh'+this.showFlag)
     this.newTabs[id].params = [{}];
-
     if(this.showFlag[id]==false){
      this.showFlag[id]=true;
     }else if(this.showFlag[id]==true){
