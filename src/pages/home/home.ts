@@ -27,7 +27,6 @@ export class HomePage {
 
   action:string;
   url:string; 
-  paramsCheck:string;
   storageKey:string;
   finalInfo:any={};
 
@@ -37,28 +36,32 @@ export class HomePage {
       this.newTabs = [{}]
       // this.showFlag.push(true);
       // this.showResponseFlag.push(true);
-      this.loadData();
-      // console.log('length'+this.showFlag)
+      // if (this.newTabs[0].url != undefined){
+      //   this.loadData();
+      // }
+this.loadData();
     }
 
     slideChange(e){
       console.log('in slide movement' +JSON.stringify(e));
       this.showFlag=true;
       if(e.direction ==2){
+        this.loadData()
         let alert = this.alertCtrl.create({
           title: 'Alert',
           subTitle: 'slide changed to right',
           buttons: ['Ok']
         }); alert.present();
+        
         console.log("slide right");
       }else if(e.direction ==4){
+        this.loadData()
         let alert = this.alertCtrl.create({
           title: 'Alert',
-
-
           subTitle: 'slide changed to left',
           buttons: ['Ok']
         }); alert.present();
+       
         console.log("slide left");
       }
      
@@ -80,40 +83,39 @@ removeTab(index){
     this.setData();
 
   }
+  this.goToPage1(index-1)
 }
 saveData(id){
   // this.newTabs.action;
   // this.newTabs.url;
   if (this.newTabs[id].params !== undefined) {
       for (var i=0; i<this.newTabs[id].params.length; i++) {
+        if (this.newTabs[id].params[i].paramsCheck === true) {
     this.result[this.newTabs[id].params[i].key]= this.newTabs[id].params[i].value;
     console.log('res'+JSON.stringify(this.result))
+        }
     }
 
   }
-    for (let i=0;i<this.newTabs.length;i++) {
+    // for (let i=0;i<this.newTabs.length;i++) {
  
-  if(this.newTabs[i].action==="get"){
-    this.getData(i);
-    break;
+  if(this.newTabs[id].action==="get"){
+    this.getData(id);
   }
-  
-
-  else if(this.newTabs[i].action==="post"){
+  else if(this.newTabs[id].action==="post"){
     console.log("post");
-    this.postData(i);
+    this.postData(id);
   }
-  else if(this.newTabs[i].action==="delete"){
+  else if(this.newTabs[id].action==="delete"){
     console.log("delete");
-    this.deleteData(i);
+    this.deleteData(id);
   }  
-  else if(this.newTabs[i].action==="patch"){
+  else if(this.newTabs[id].action==="patch"){
     console.log("patch");
-    this.updateData(i);
+    this.updateData(id);
   }  
   this.setData();
- 
-    }
+    // }
 }
 
 goToPage1(id){
@@ -131,7 +133,8 @@ getData(id){
   this.http.get(this.newTabs[id].url, {params: this.result})
   .subscribe((data:any) => {
     this.newTabs[id].response = JSON.stringify(data);
-    if (this.response) { 
+    
+    if (this.newTabs[id].response) { 
       this.setData();
       this.showResponseFlag[id]=false;
 
@@ -141,14 +144,14 @@ getData(id){
     // this.showRes(id);
 
   });
-
+  console.log('invalid', this.newTabs[id].response)
 }
 //post data
 postData(id){
   this.http.post(this.newTabs[id].url, {params: this.result})
     .subscribe((data:any) => {
       this.newTabs[id].response=JSON.stringify(data);
-      if (this.response) { 
+      if (this.newTabs[id].response) { 
         this.result={};
         this.setData()
       this.showResponseFlag[id]=false;
@@ -165,6 +168,11 @@ deleteData(id){
   this.http.delete(this.newTabs[id].url,{params: this.result})
     .subscribe((data:any) => {
       this.newTabs[id].response=JSON.stringify(data);
+      if(this.newTabs[id].response) {
+        this.setData()
+        this.showResponseFlag[id]=false;
+        this.result = {}
+      }
       console.log('final delete'+JSON.stringify(this.newTabs))
      }, error => {
       console.log(error);
@@ -176,6 +184,11 @@ updateData(id){
   this.http.patch(this.newTabs[id].url,{params: this.result})
   .subscribe((data:any) => {
     this.newTabs[id].response=JSON.stringify(data);
+    if(this.newTabs[id].response) {
+      this.setData()
+      this.showResponseFlag[id]=false;
+      this.result = {}
+    }
       console.log('final patch'+JSON.stringify(this.newTabs))
     // console.log("status" +data.status);
     // console.log("data" +data.data); // data received by server
@@ -195,19 +208,26 @@ setData(){
 loadData(){
  
   this.storage.get('storageKey').then((val) => {
-    console.log('Yourload data ', JSON.parse(val));
+    console.log('Yourload data ', JSON.parse(val), +JSON.stringify(this.showFlag));
     this.newTabs = JSON.parse(val)
     if (this.newTabs) {
+      console.log("loading time ="  +this.newTabs[0].url)
+
       for(var i=0;i<this.newTabs.length;i++){
-        this.showResponseFlag.push(true)
+        if(this.newTabs[i].response != undefined){
+          this.showResponseFlag.push(false)
+        }else{
+          this.showResponseFlag.push(true)
+
+        }
         // if(this.newTabs[i].response !="undefined"){
         //   this.showResponseFlag[i]=false;
         // }
     
-        if(this.newTabs[i].params !="undefined"){
+        if(this.newTabs[i].params !=undefined){ 
           this.showFlag.push(false);
-        } 
-      }
+        } else this.showFlag.push(true)
+      } console.log('arraay', this.showFlag)
     }
   });
 }
@@ -244,6 +264,7 @@ console.log('hghgh'+this.showFlag)
       this.showFlag[id]=false;
       console.log('params'+JSON.stringify(this.result))
     }
+    this.setData();
   }
 
 }
