@@ -38,31 +38,35 @@ export class HomePage {
       // this.showResponseFlag.push(true);
       // if (this.newTabs[0].url != undefined){
       //   this.loadData();
+      // }else{
+      //   this.loadData()
       // }
-this.loadData();
+      this.loadData();
+
     }
 
     slideChange(e){
+
       console.log('in slide movement' +JSON.stringify(e));
-      this.showFlag=true;
+      // this.showFlag=true;
       if(e.direction ==2){
-        this.loadData()
         let alert = this.alertCtrl.create({
           title: 'Alert',
           subTitle: 'slide changed to right',
           buttons: ['Ok']
         }); alert.present();
-        
         console.log("slide right");
+        this.loadData();
+
       }else if(e.direction ==4){
-        this.loadData()
         let alert = this.alertCtrl.create({
           title: 'Alert',
           subTitle: 'slide changed to left',
           buttons: ['Ok']
-        }); alert.present();
-       
+        }); alert.present();       
         console.log("slide left");
+        this.loadData();
+
       }
      
     }
@@ -202,7 +206,13 @@ setData(){
   this.storage.set('storageKey',JSON.stringify(this.newTabs));
   console.log("set data=" +JSON.stringify(this.storageKey));
   }
- 
+//  clearData(){
+//    this.storage.clear()
+//    this.storage.get('storageKey').then((val) => {
+//     console.log('Yourload data ', JSON.parse(val));
+//    }).catch((err) => {
+//   })
+//  }
 
 //loadData
 loadData(){
@@ -210,7 +220,9 @@ loadData(){
   this.storage.get('storageKey').then((val) => {
     console.log('Yourload data ', JSON.parse(val), +JSON.stringify(this.showFlag));
     this.newTabs = JSON.parse(val)
-    if (this.newTabs) {
+    console.log("value ="+JSON.parse(val)); 
+    // this.newTabs= [{}];
+    if (val!==null) {
       console.log("loading time ="  +this.newTabs[0].url)
 
       for(var i=0;i<this.newTabs.length;i++){
@@ -228,7 +240,10 @@ loadData(){
           this.showFlag.push(false);
         } else this.showFlag.push(true)
       } console.log('arraay', this.showFlag)
-    }
+    } else this.newTabs=[{}]
+  })
+  .catch((err) => {
+    console.log('no dataaaaaaaaaaaaaaaa')
   });
 }
   addParamsList(id){
@@ -266,5 +281,7 @@ console.log('hghgh'+this.showFlag)
     }
     this.setData();
   }
+onChange(){
 
+}
 }

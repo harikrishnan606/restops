@@ -73,7 +73,7 @@
               </tr>
               <tr *ngFor="let params of newTabs[i].params; let in=index">
                 <td>
-                  <ion-checkbox name="paramsCheck" [(ngModel)]="params.paramsCheck" (click)="setData()" checked></ion-checkbox>
+                  <ion-checkbox name="paramsCheck" [(ngModel)]="params.paramsCheck" (click)=" setData();" checked></ion-checkbox>
                 </td>
                 <td>
                   <ion-input type="text" placeholder="key"  [(ngModel)]="params.key">{{params.key}}</ion-input>
