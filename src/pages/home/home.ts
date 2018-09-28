@@ -26,9 +26,8 @@ export class HomePage {
   response: any = {};
 
   action:string;
-  url:string; 
+  url:string;
   storageKey:string;
-  finalInfo:any={};
 
   constructor(public navCtrl: NavController,private alertCtrl: AlertController,
     public http: HttpClient,private storage: Storage ) {
@@ -126,7 +125,7 @@ goToPage1(id){
   // let currentIndex = this.slides.getActiveIndex();
   // console.log('Current index is', currentIndex);
   this.slides.slideTo(id, 500);
-  console.log('goto'+id)
+  console.log('goto page'+id)
   // this.newTabs = window.localStorage.getItem("storageKey")
 
 }
@@ -145,8 +144,8 @@ getData(id){
       this.result={};
       console.log('final get ='+JSON.stringify(this.newTabs))
     }
-    // this.showRes(id);
-
+  }, error => {
+    console.log(error);
   });
   console.log('invalid', this.newTabs[id].response)
 }
@@ -246,9 +245,9 @@ loadData(){
     console.log('no dataaaaaaaaaaaaaaaa')
   });
 }
-  addParamsList(id){
+  addParamsList(id,inid){
     this.newTabs[id].params.push({});
-    
+    this.newTabs[id].params[inid+1].paramsCheck=true
   }
 
   removeParamsList(id,inid){
@@ -263,16 +262,20 @@ alert.present();
     }else{
       this.newTabs[id].params.splice(inid,1)
     }
-
+this.setData()
   }
 
   // showRes(id){
   //   this.showResponseFlag[id]=false;
   // }
   showParams(id){
-   
-console.log('hghgh'+this.showFlag)
-    this.newTabs[id].params = [{}];
+    this.setData();
+
+    console.log('hghgh'+this.newTabs[id].params)
+    if (this.newTabs[id].params === undefined) {
+        this.newTabs[id].params = [{}];
+       this.newTabs[id].params[0].paramsCheck=true
+    }
     if(this.showFlag[id]==false){
      this.showFlag[id]=true;
     }else if(this.showFlag[id]==true){
@@ -281,7 +284,4 @@ console.log('hghgh'+this.showFlag)
     }
     this.setData();
   }
-onChange(){
-
-}
 }
