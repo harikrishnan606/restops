@@ -18,7 +18,7 @@
       </ion-title>
     </ion-navbar>
   </ion-header>
-<ion-content id="body" padding="">
+<ion-content id="body" padding >
   <ion-scroll scrollY="true" style="white-space:nowrap; height: 600px;">
     <div class="tab">
       <ion-scroll scrollX="true" style="white-space:nowrap; height: 60px;">
@@ -76,8 +76,8 @@
                   <ion-input type="text" placeholder="value"   [(ngModel)]="params.value"></ion-input>
                 </td>
                 <td>
-                  <ion-icon name="add" *ngIf = "in === newTabs[i].params.length-1" class="add-icon" (click)="addParamsList(i,in)"></ion-icon>
-                  <!-- <p>{{in}}</p> -->
+                  <ion-icon name="add" *ngIf= "in === newTabs[i].params.length-1" class="add-icon" (click)="addParamsList(i,in)"></ion-icon>
+                   <!--<p>{{first}}</p>-->
                   &nbsp;&nbsp;
                   <ion-icon name="trash" *ngIf="newTabs[i].params.length>1" (click)="removeParamsList(i,in)"></ion-icon>
                 </td>

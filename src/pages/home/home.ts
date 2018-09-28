@@ -125,7 +125,7 @@ goToPage1(id){
   // let currentIndex = this.slides.getActiveIndex();
   // console.log('Current index is', currentIndex);
   this.slides.slideTo(id, 500);
-  console.log('goto'+id)
+  console.log('goto page'+id)
   // this.newTabs = window.localStorage.getItem("storageKey")
 
 }
@@ -274,7 +274,7 @@ this.setData()
     console.log('hghgh'+this.newTabs[id].params)
     if (this.newTabs[id].params === undefined) {
         this.newTabs[id].params = [{}];
-       1 this.newTabs[id].params[0].paramsCheck=true
+       this.newTabs[id].params[0].paramsCheck=true
     }
     if(this.showFlag[id]==false){
      this.showFlag[id]=true;
