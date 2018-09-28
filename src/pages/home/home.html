@@ -1,8 +1,7 @@
-<div id="navbar">
   <ion-header>
     <ion-navbar>
       <ion-title>
-        <ion-icon name="menu" class="head"></ion-icon>
+        <ion-icon name="menu"></ion-icon>
         RESTops
 
         <!-- <div>
@@ -19,8 +18,7 @@
       </ion-title>
     </ion-navbar>
   </ion-header>
-</div>
-<ion-content padding>
+<ion-content id="body" padding="">
   <ion-scroll scrollY="true" style="white-space:nowrap; height: 600px;">
     <div class="tab">
       <ion-scroll scrollX="true" style="white-space:nowrap; height: 60px;">
@@ -35,11 +33,9 @@
       </ion-scroll>
     </div>
     
-
-
     <ion-slides pager="true">
       <ion-slide *ngFor="let tabs of newTabs; let i=index" (swipe)="slideChange($event)">
-        <div id="body">
+        <div id="body-content">
           <ion-item>
             <ion-label floating>Select</ion-label>
             <ion-select name="action" (ngModelChange)="setData()" [(ngModel)]="newTabs[i].action" #ctl="ngModel">
@@ -47,7 +43,6 @@
               <ion-option  value="post">POST</ion-option>
               <ion-option  value="delete">DELETE</ion-option>
               <ion-option  value="patch">PATCH</ion-option>
-
             </ion-select>
           </ion-item>
 
@@ -62,7 +57,6 @@
               <button class="param-btn" ion-button color="light" (click)="showParams(i)">Params</button>
             </ion-col>
           </ion-row>
-
           <div *ngIf="showFlag[i]==false">
             <table id="params" align="center">
               <tr>
@@ -76,21 +70,20 @@
                   <ion-checkbox name="paramsCheck" [(ngModel)]="params.paramsCheck" (click)=" setData();" checked></ion-checkbox>
                 </td>
                 <td>
-                  <ion-input type="text" placeholder="key"  [(ngModel)]="params.key">{{params.key}}</ion-input>
+                  <ion-input type="text" placeholder="key"  [(ngModel)]="params.key"></ion-input>
                 </td>
                 <td>
-                  <ion-input type="text" placeholder="value"   [(ngModel)]="params.value">{{params.value}}</ion-input>
+                  <ion-input type="text" placeholder="value"   [(ngModel)]="params.value"></ion-input>
                 </td>
                 <td>
-                  <ion-icon name="add" class="add-icon" (click)="addParamsList(i)"></ion-icon>
+                  <ion-icon name="add" *ngIf = "in === newTabs[i].params.length-1" class="add-icon" (click)="addParamsList(i,in)"></ion-icon>
+                  <!-- <p>{{in}}</p> -->
                   &nbsp;&nbsp;
-                  <ion-icon name="trash" (click)="removeParamsList(i,in)"></ion-icon>
-
+                  <ion-icon name="trash" *ngIf="newTabs[i].params.length>1" (click)="removeParamsList(i,in)"></ion-icon>
                 </td>
               </tr>
             </table>
           </div>
-
           <button ion-button type="submit" class="btn-arrange" block (click)="saveData(i)">Send</button>
 
           <div class="jumbotron" *ngIf="showResponseFlag[i]==false">
@@ -100,6 +93,7 @@
                 rows="3"></textarea>
             </div>
           </div>
+
         </div>
       </ion-slide>
     </ion-slides>
