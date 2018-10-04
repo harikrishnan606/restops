@@ -23,17 +23,17 @@
     <div class="tab">
       <ion-scroll scrollX="true" style="white-space:nowrap; height: 60px;">
         <ion-row nowrap>
-          <li calss="span-tab" *ngFor="let tabs of newTabs; let i=index">
-            <span *ngIf="tabs.url===undefined && i===0" (click)="goToPage1(i)">New Tab</span>
-            <span *ngIf="tabs.url===undefined && i>0" (click)="goToPage1(i)">New Tab{{i}}</span>
-            <a *ngIf="tabs.url !==undefined" (click)="goToPage1(i)">{{tabs.url}}</a>
+          <li  id="tab" calss="span-tab" *ngFor="let tabs of newTabs; let i=index" >
+            <button class="tab-links" *ngIf="tabs.url===undefined && i===0" (click)="goToPage1(i)"  >New Tab</button>
+            <span [ngClass]="{true:'clrchange',false:'clrwhite' }[bgColor[i]]"  *ngIf="tabs.url===undefined && i>0" (click)="goToPage1(i)">New Tab{{i}}</span>
+            <a [ngClass]="{true:'clrchange',false:'clrwhite' }[bgColor[i]]"  *ngIf="tabs.url !==undefined" (click)="goToPage1(i)">{{tabs.url}}</a>
             <ion-icon calss="list-close" name="close-circle" (click)="removeTab(i)"></ion-icon>
           </li>
         </ion-row>
       </ion-scroll>
     </div>
     
-    <ion-slides pager="true">
+    <ion-slides pager="false">
       <ion-slide *ngFor="let tabs of newTabs; let i=index" (swipe)="slideChange($event)">
         <div id="body-content">
           <ion-item>

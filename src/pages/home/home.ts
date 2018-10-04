@@ -18,6 +18,7 @@ export class HomePage {
   @ViewChild(Slides) slides: Slides;
   showFlag:any=[];
   showResponseFlag:any=[];
+  bgColor:any=[];
 
   newTabs:any =[];
   // getParamsList:any = [{key:"", value:""}];
@@ -72,6 +73,7 @@ export class HomePage {
   
 addTab(){
   this.newTabs.push({});
+  this.bgColor.push(true)
     this.showFlag.push(true);
   console.log("tab data" +JSON.stringify(this.newTabs));
   this.goToPage1(this.newTabs.length-1)
@@ -122,11 +124,21 @@ saveData(id){
 }
 
 goToPage1(id){
+
+  for(var i=0;i<this.bgColor.length;i++){
+    if(i==id){
+      this.bgColor[i]=true;
+    }else{
+      this.bgColor[i]=false;
+    }
+  }
   // let currentIndex = this.slides.getActiveIndex();
   // console.log('Current index is', currentIndex);
   this.slides.slideTo(id, 500);
   console.log('goto page'+id)
   // this.newTabs = window.localStorage.getItem("storageKey")
+
+
 
 }
 
@@ -225,6 +237,7 @@ loadData(){
       console.log("loading time ="  +this.newTabs[0].url)
 
       for(var i=0;i<this.newTabs.length;i++){
+        this.bgColor.push(false);
         if(this.newTabs[i].response != undefined){
           this.showResponseFlag.push(false)
         }else{
@@ -282,6 +295,8 @@ this.setData()
       this.showFlag[id]=false;
       console.log('params'+JSON.stringify(this.result))
     }
-    this.setData();
+    this.setData(); 
   }
+
+   
 }
