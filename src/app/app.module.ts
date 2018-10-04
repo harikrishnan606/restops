@@ -10,13 +10,15 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-
+import { SamplePage } from '../pages/sample/sample';
 
 
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    SamplePage
+
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import { HomePage } from '../pages/home/home';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    SamplePage
   ],
   providers: [
     StatusBar,

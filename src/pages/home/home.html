@@ -3,6 +3,7 @@
       <ion-title>
         <ion-icon name="menu"></ion-icon>
         RESTops
+          <ion-icon name="desktop" (click)="nextPage()"></ion-icon>
 
         <!-- <div>
           <li ng-repeat=" x in newTabs">
@@ -34,7 +35,7 @@
     </div>
     
     <ion-slides pager="false">
-      <ion-slide *ngFor="let tabs of newTabs; let i=index" (swipe)="slideChange($event)">
+      <ion-slide *ngFor="let tabs of newTabs; let i=index" (swipe)="slideChange($event,i)">
         <div id="body-content">
           <ion-item>
             <ion-label floating>Select</ion-label>
