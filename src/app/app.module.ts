@@ -11,18 +11,27 @@ import { IonicStorageModule } from '@ionic/storage';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SamplePage } from '../pages/sample/sample';
+import { LoginPage } from '../pages/login/login';
+import {RegisterPage } from '../pages/register/register';
+
+import { RegisterServiceProvider } from '../providers/register-service/register-service'
+import { FormsModule }   from '@angular/forms';
+
 
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
-    SamplePage
+    SamplePage,
+    LoginPage,
+    RegisterPage
 
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+   FormsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot()
     ],
@@ -30,12 +39,15 @@ import { SamplePage } from '../pages/sample/sample';
   entryComponents: [
     MyApp,
     HomePage,
-    SamplePage
+    SamplePage,
+    LoginPage,
+    RegisterPage
   ],
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    RegisterServiceProvider
   ]
 })
 export class AppModule {}
