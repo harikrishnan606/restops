@@ -5,7 +5,7 @@ import { RegisterServiceProvider } from '../../providers/register-service/regist
 import { HomePage } from '../home/home';
 
 //for validations
-import {FormBuilder, Validators,FormGroup, AbstractControl} from '@angular/forms';
+import {FormBuilder, Validators,FormGroup, AbstractControl, FormControl} from '@angular/forms';
 // import { FormsModule }   from '@angular/forms';
 
 
@@ -29,13 +29,17 @@ export class LoginPage {
 
   //validation
    loginform : FormGroup;
-
+   validation_messages:any={}
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
   public registerService: RegisterServiceProvider,public formBuilder : FormBuilder ) {
 
     this.loginform = formBuilder.group({
-      Username      : ['', Validators.required],
+      Username      : new FormControl('', Validators.compose([
+                    Validators.required,
+                    Validators.maxLength(12),
+                    Validators.minLength(5),
+                    Validators.pattern('[a-zA-Z]*'),])),
       Password      : ['', Validators.required]
 		
     });
@@ -43,10 +47,18 @@ export class LoginPage {
     this.Password = this.loginform.controls['Password'];
 
 
-  
-
-  }
-
+   this.validation_messages={
+      'Username': {
+      'required':'You must enter a username.',
+       'minlength':'Minimum 5 characters are required for username.',
+       'maxlength':'You can enter a username of maximum 12 characters.',
+      'pattern':'Username should be composed of letters only.'
+      
+      
+     
+      }
+     }
+    }
   ionViewDidLoad() {
     this.getObj=this.registerService.getData();
     console.log('login Info :', this.getObj);
@@ -54,7 +66,7 @@ export class LoginPage {
   }
 
   login(){
-
+    if (this.loginform.valid) {
    for(var i=0; i<this.getObj.length;i++){
     
     if(this.username === this.getObj[i].username && this.password === this.getObj[i].password){
@@ -62,6 +74,7 @@ export class LoginPage {
       this.navCtrl.push(HomePage);
       }
    }
+  }
   
   
   }
