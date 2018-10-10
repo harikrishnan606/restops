@@ -1,10 +1,12 @@
   <ion-header>
-    <ion-navbar>
+    <ion-navbar color="danger">
       <ion-title>
-        <ion-icon name="menu"></ion-icon>
-        RESTops
-          <ion-icon name="desktop" (click)="nextPage()"></ion-icon>
-
+          <button ion-button menuToggle>
+              <ion-icon name="menu"></ion-icon>
+              RESTops
+              <ion-icon name="desktop" (click)="nextPage()"></ion-icon>
+    
+            </button>   
         <!-- <div>
           <li ng-repeat=" x in newTabs">
             <span calss="span-tab" *ngIf="url===undefined">New Tab</span>

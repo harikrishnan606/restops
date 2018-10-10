@@ -12,9 +12,15 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { SamplePage } from '../pages/sample/sample';
 import { LoginPage } from '../pages/login/login';
-import {RegisterPage } from '../pages/register/register';
+import { RegisterPage } from '../pages/register/register';
+import { Tab1Page } from '../pages/tab1/tab1';
+import { Tab2Page } from '../pages/tab2/tab2';
+import { MenuPage } from '../pages/menu/menu';
+
+
 
 import { RegisterServiceProvider } from '../providers/register-service/register-service'
+
 import { FormsModule }   from '@angular/forms';
 
 
@@ -25,7 +31,10 @@ import { FormsModule }   from '@angular/forms';
     HomePage,
     SamplePage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    Tab2Page,
+    Tab1Page,
+    MenuPage
 
   ],
   imports: [
@@ -41,7 +50,11 @@ import { FormsModule }   from '@angular/forms';
     HomePage,
     SamplePage,
     LoginPage,
-    RegisterPage
+    RegisterPage,
+    Tab2Page,
+    Tab1Page,
+    MenuPage,
+
   ],
   providers: [
     StatusBar,

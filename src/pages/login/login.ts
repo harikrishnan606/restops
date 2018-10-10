@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { RegisterPage } from '../register/register';
 import { RegisterServiceProvider } from '../../providers/register-service/register-service';
-import { HomePage } from '../home/home';
+import { MenuPage } from '../menu/menu';
 
 //for validations
 import {FormBuilder, Validators,FormGroup, AbstractControl, FormControl} from '@angular/forms';
@@ -53,9 +53,7 @@ export class LoginPage {
        'minlength':'Minimum 5 characters are required for username.',
        'maxlength':'You can enter a username of maximum 12 characters.',
       'pattern':'Username should be composed of letters only.'
-      
-      
-     
+           
       }
      }
     }
@@ -71,7 +69,7 @@ export class LoginPage {
     
     if(this.username === this.getObj[i].username && this.password === this.getObj[i].password){
       console.log('if')
-      this.navCtrl.push(HomePage);
+      this.navCtrl.setRoot(MenuPage);
       }
    }
   }
