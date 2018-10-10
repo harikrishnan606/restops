@@ -1,0 +1,33 @@
+
+<ion-header>
+
+
+    <ion-navbar color="danger">
+        <ion-buttons left start>
+            <button ion-button menuToggle>
+              <ion-icon name="menu"></ion-icon>
+            </button>
+          </ion-buttons>
+  
+    </ion-navbar>
+
+</ion-header>
+
+
+      <ion-content padding text-center>
+         
+        <ion-title>Tonico Cafe  ...  <ion-icon name="ios-cafe"></ion-icon></ion-title>
+        <ion-list>
+          <ion-item>
+            <ion-input placeholder="cafename" [(ngModel)]="cafeObj.cafename" ></ion-input>
+          </ion-item>
+         
+         <ion-item>
+                <ion-textarea placeholder="Enter a description"  [(ngModel)]="cafeObj.cafedesc"></ion-textarea>
+         </ion-item>
+
+         
+         </ion-list>
+      
+        <button ion-button full color="light" (click)="next()">Next </button>
+      </ion-content>
